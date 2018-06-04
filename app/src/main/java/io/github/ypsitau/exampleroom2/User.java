@@ -17,8 +17,8 @@ public class User {
 		@Query("SELECT * FROM user")
 		List<User> selectAll();
 
-		@Query("SELECT * FROM user WHERE uid IN (:userIds)")
-		List<User> selectByIds(int[] userIds);
+		@Query("SELECT * FROM user WHERE uid IN (:uids)")
+		List<User> selectByIds(int[] uids);
 
 		@Query("SELECT * FROM user WHERE firstName LIKE :firstName AND "
 				+ "lastName LIKE :lastName LIMIT 1")

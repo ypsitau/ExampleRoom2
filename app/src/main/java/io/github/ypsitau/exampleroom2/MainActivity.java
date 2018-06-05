@@ -3,10 +3,7 @@ package io.github.ypsitau.exampleroom2;
 import android.arch.persistence.room.Room;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = "MainActivity";
@@ -19,26 +16,33 @@ public class MainActivity extends AppCompatActivity {
 		editText_log = findViewById(R.id.editText_log);
 		db = Room.databaseBuilder(getApplicationContext(),
 				AppDatabase.class, "exampleroom2.sqlite3").allowMainThreadQueries().build();
-		db.getPersonDao().insert(new Person("Person-A"));
-		db.getPersonDao().insert(new Person("Person-B"));
-		db.getPersonDao().insert(new Person("Person-C"));
-		db.getPersonDao().insert(new Person("Person-D"));
-		db.getPersonDao().insert(new Person("Person-E"));
-		db.getPersonDao().insert(new Person("Person-F"));
-
-
-		db.getUserDao().insertMulti(
-				new User("first1", "last1"),
-				new User("first2", "last2"),
-				new User("first3", "last3"),
-				new User("first4", "last4"),
-				new User("first5", "last5"),
-				new User("first6", "last6"),
-				new User("first7", "last7"),
-				new User("first8", "last8"));
-		List<User> users = db.getUserDao().selectAll();
-		for (User user : users) {
-			printf("%s\n", user.firstName);
+		User.DaoIf userDao = db.getUserDao();
+		Pet.DaoIf petDao = db.getPetDao();
+		UserWithPet.DaoIf userWithPetDao = db.getUserWithPetDao();
+		/*
+		personDao.insert(new User(1, "User-A"));
+		petDao.insert(new Pet("Pet1", 1));
+		petDao.insert(new Pet("Pet2", 1));
+		personDao.insert(new User(2, "User-B"));
+		petDao.insert(new Pet("Pet3", 2));
+		petDao.insert(new Pet("Pet4", 2));
+		petDao.insert(new Pet("Pet5", 2));
+		personDao.insert(new User(3, "User-C"));
+		petDao.insert(new Pet("Pet6", 3));
+		*/
+		/*
+		for (User user : userDao.selectAll()) {
+			printf("%s\n", user.name);
+		}
+		for (Pet pet : petDao.selectAll()) {
+			printf("%s\n", pet.name);
+		}
+		*/
+		for (UserWithPet userWithPet : userWithPetDao.selectAll()) {
+			printf("%s\n", userWithPet.user.name);
+			for (Pet pet : userWithPet.pets) {
+				printf("  %s\n", pet.name);
+			}
 		}
 	}
 	private void printf(String format, Object... args) {

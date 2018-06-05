@@ -2,43 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "38d144c23ada45f0c92212769b2965cc",
+    "identityHash": "af820cf468063a2070631c4e11ffb197",
     "entities": [
       {
         "tableName": "User",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `firstName` TEXT, `lastName` TEXT)",
-        "fields": [
-          {
-            "fieldPath": "uid",
-            "columnName": "uid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "firstName",
-            "columnName": "firstName",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lastName",
-            "columnName": "lastName",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "uid"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "Person",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `name` TEXT, PRIMARY KEY(`uid`))",
         "fields": [
           {
             "fieldPath": "uid",
@@ -57,14 +25,23 @@
           "columnNames": [
             "uid"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_User_uid",
+            "unique": false,
+            "columnNames": [
+              "uid"
+            ],
+            "createSql": "CREATE  INDEX `index_User_uid` ON `${TABLE_NAME}` (`uid`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
         "tableName": "Pet",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `uidPerson` INTEGER NOT NULL, FOREIGN KEY(`uidPerson`) REFERENCES `Person`(`uid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `uidUser` INTEGER NOT NULL, FOREIGN KEY(`uidUser`) REFERENCES `User`(`uid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "uid",
@@ -79,8 +56,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "uidPerson",
-            "columnName": "uidPerson",
+            "fieldPath": "uidUser",
+            "columnName": "uidUser",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -91,14 +68,23 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_Pet_uidUser",
+            "unique": false,
+            "columnNames": [
+              "uidUser"
+            ],
+            "createSql": "CREATE  INDEX `index_Pet_uidUser` ON `${TABLE_NAME}` (`uidUser`)"
+          }
+        ],
         "foreignKeys": [
           {
-            "table": "Person",
+            "table": "User",
             "onDelete": "NO ACTION",
             "onUpdate": "NO ACTION",
             "columns": [
-              "uidPerson"
+              "uidUser"
             ],
             "referencedColumns": [
               "uid"
@@ -109,7 +95,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"38d144c23ada45f0c92212769b2965cc\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"af820cf468063a2070631c4e11ffb197\")"
     ]
   }
 }

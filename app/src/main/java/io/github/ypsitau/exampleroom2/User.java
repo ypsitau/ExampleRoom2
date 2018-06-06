@@ -21,6 +21,9 @@ public class User {
 
 		@Query("SELECT * FROM User")
 		List<User> selectAll();
+
+		@Query("SELECT COUNT(*) FROM User")
+		int countAll();
 	}
 	@PrimaryKey
 	public int uid;
